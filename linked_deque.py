@@ -28,11 +28,27 @@ class linked_deque:
         if self.front:
             return self.front.get_data()
     
-    #def remove_front(self):
-        
+    def remove_front(self):
+        if self.is_empty():
+            return None
+        removed = self.front.get_data() # make a temp for this
+        self.front = self.front.get_next_node() # change the deque
+        if self.front: # check if empty
+            self.front.set_previous_node(None)
+        else: # only one node in the deque now deque will be empty
+            self.back = None
+        return removed
 
-    #def remove_back(self):
-
+    def remove_back(self):
+        if self.is_empty():
+            return None
+        removed = self.back.get_data()
+        self.back = self.back.get_previous_node()
+        if self.back:
+            self.back.set_next_node(None)
+        else:
+            self.front = None
+        return removed
     
     def clear(self):
         self.front = None
@@ -42,14 +58,11 @@ class linked_deque:
         return self.front is None
     
     def display(self):
-        if self.is_empty(): # check if empty
-            print("Stock Ledger empty.")
-            return None
-        current_node = self.front # start at front
-        purchase = current_node.get_data() # get front node data
-        while current_node is not None:
-            print(f"  {purchase.stock_symbol} Share/s - Bought at ${purchase.cost_per_share}")
-            current_node = current_node.get_next_node()
+        current = self.front
+        while current: # loop while a next node exists and prints the deque
+            data = current.get_data()
+            print(f"  {data.stock_symbol}: ${data.cost_per_share:.2f} per share ({data.shares} shares)")
+            current = current.get_next_node()
         
     
     class DLNode:
